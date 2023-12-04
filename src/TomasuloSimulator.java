@@ -30,7 +30,7 @@ public class TomasuloSimulator {
                 int immediate = 0;
                 int address = 0;
 
-                if (tokens[0].split(":").length > 0) {
+                if (line.split(":").length > 1) {
                     label = tokens[0].split(":")[0];
                     type = InstructionType.valueOf(tokens[1].split("\\.")[0]);
                     tokens = Arrays.copyOfRange(tokens, 1, tokens.length);
@@ -42,12 +42,10 @@ public class TomasuloSimulator {
 
                 switch (type) {
                     case L :
-                        rt = Integer.parseInt(tokens[1].split("")[1]);
-                        address = Integer.parseInt(tokens[2]);
-                        break;
                     case S:
                         rt = Integer.parseInt(tokens[1].split("")[1]);
                         address = Integer.parseInt(tokens[2]);
+                        break;
                     case ADD:
                     case SUB:
                     case DIV:
@@ -60,7 +58,7 @@ public class TomasuloSimulator {
                     case ADDI:
                         rd = Integer.parseInt(tokens[1].split("")[1]);
                         rs = Integer.parseInt(tokens[2].split("")[1]);
-                        rt = Integer.parseInt(tokens[3]);
+                        immediate = Integer.parseInt(tokens[3]);
                         break;
                     case BNEZ:
                         rt = Integer.parseInt(tokens[1].split("")[1]);
