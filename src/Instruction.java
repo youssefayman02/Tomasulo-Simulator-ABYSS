@@ -8,6 +8,11 @@ public class Instruction {
 
     private String label;
 
+    private int issuedAt;
+    private int startedAt;
+    private int finishedAt;
+    private int writeBackAt;
+
     public Instruction(InstructionType type, int rs, int rt, int rd, int immediate, int address, String label) {
         this.type = type;
         this.rs = rs;
@@ -16,6 +21,42 @@ public class Instruction {
         this.immediate = immediate;
         this.address = address;
         this.label = label;
+        this.issuedAt = -1;
+        this.startedAt = -1;
+        this.writeBackAt = -1;
+        this.finishedAt = -1;
+    }
+
+    public void setIssuedAt(int issuedAt) {
+        this.issuedAt = issuedAt;
+    }
+
+    public void setStartedAt(int startedAt) {
+        this.startedAt = startedAt;
+    }
+
+    public void setFinishedAt(int finishedAt) {
+        this.finishedAt = finishedAt;
+    }
+
+    public void setWriteBackAt(int writeBackAt) {
+        this.writeBackAt = writeBackAt;
+    }
+
+    public int getIssuedAt() {
+        return issuedAt;
+    }
+
+    public int getStartedAt() {
+        return startedAt;
+    }
+
+    public int getFinishedAt() {
+        return finishedAt;
+    }
+
+    public int getWriteBackAt() {
+        return writeBackAt;
     }
 
     public InstructionType getType() {
