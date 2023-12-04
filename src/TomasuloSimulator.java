@@ -35,6 +35,7 @@ public class TomasuloSimulator {
                     type = InstructionType.valueOf(tokens[1].split("\\.")[0]);
                     tokens = Arrays.copyOfRange(tokens, 1, tokens.length);
                 }
+
                 else {
                     type = InstructionType.valueOf(tokens[0].split("\\.")[0]);
                 }
