@@ -185,14 +185,14 @@ public class TomasuloSimulator {
                 instruction.setStartedAt(clockCycle);
                 switch (instruction.getType()) {
                     case ADD:
-                        instruction.setFinishedAt((clockCycle + addLatency) - 1);
+                        instruction.setFinishedAt(clockCycle + addLatency - 1);
                         break;
                     default:
                         break;
                 }
             }
-            if (clockCycle > instruction.getFinishedAt()) {
-                instruction.setWriteBackAt(clockCycle);
+            if (this.clockCycle == instruction.getFinishedAt() + 1) {
+                instruction.setWriteBackAt(this.clockCycle);
                 System.out.println(instruction.toString() + " Finished Excecution");
             }
             System.out.println("INSTRUCTION | ISSUED AT | STARTED AT | FINISHED AT | WRITE BACK AT");
@@ -202,6 +202,7 @@ public class TomasuloSimulator {
 
     public void executeInstructions() {
         for (Instruction instruction : instructionQueue) {
+            System.out.println("Clock Cycle: " + this.clockCycle);
             switch (instruction.getType()) {
                 case ADD:
                 case SUB:
@@ -214,7 +215,8 @@ public class TomasuloSimulator {
             checkSystemStatus();
             checkAddSubReservationStations();
             checkMulDivReservationStations();
-            clockCycle += 1;
+            this.clockCycle += 1;
+            System.out.println("====================================================================");
         }
     }
 

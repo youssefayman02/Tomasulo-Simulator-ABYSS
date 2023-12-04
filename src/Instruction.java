@@ -21,10 +21,10 @@ public class Instruction {
         this.immediate = immediate;
         this.address = address;
         this.label = label;
-        this.issuedAt = -1;
-        this.startedAt = -1;
-        this.writeBackAt = -1;
-        this.finishedAt = -1;
+        this.issuedAt = 0;
+        this.startedAt = 0;
+        this.writeBackAt = 0;
+        this.finishedAt = 0;
     }
 
     public void setIssuedAt(int issuedAt) {
