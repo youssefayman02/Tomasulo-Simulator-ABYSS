@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Queue;
 
 public class TomasuloSimulator {
@@ -32,6 +33,6 @@ public class TomasuloSimulator {
     }
 
     public static void main(String[] args) {
-
+        ArrayList<Integer> arr = new ArrayList<>();
     }
 }
