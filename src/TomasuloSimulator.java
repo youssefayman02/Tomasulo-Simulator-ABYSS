@@ -2,18 +2,17 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Queue;
-import java.util.Scanner;
+import java.util.*;
 
 public class TomasuloSimulator {
 
+    public static int instructionId = 0;
     private ArrayList<Instruction> instructionQueue;
     private ArrayList<ReservationStation> addSubReservationStation;
     private ArrayList<ReservationStation> mulDivReservationStation;
     private ArrayList<RegisterFileEntry> registerFile;
     private ArrayList<RegisterFileEntry> floatingPointRegisterFile;
+    private Hashtable<String, Integer> cdb;
 
     private int addSubReservationStationSize;
     private int mulDivReservationStationSize;
@@ -31,6 +30,7 @@ public class TomasuloSimulator {
         this.mulDivReservationStation = new ArrayList<>();
         this.registerFile = new ArrayList<>();
         this.floatingPointRegisterFile = new ArrayList<>();
+        this.cdb = new Hashtable<>();
         this.clockCycle = 1;
         this.programCounter = 0;
     }
@@ -115,7 +115,8 @@ public class TomasuloSimulator {
                         break;
                 }
 
-                Instruction instruction = new Instruction(type, rs, rt, rd, immediate, address, label);
+                Instruction instruction = new Instruction(instructionId, type, rs, rt, rd, immediate, address, label);
+                instructionId++;
                 instructionQueue.add(instruction);
             }
 
@@ -179,7 +180,9 @@ public class TomasuloSimulator {
     }
 
     public void checkAddSubReservationStations() {
-
+        for (ReservationStation addSubReservationEntry : this.addSubReservationStation) {
+            // check if an instruction in the reservation station has finished excecuting
+        }
     }
 
     public void fillRegisterFile(int registerNumber) {
@@ -211,6 +214,9 @@ public class TomasuloSimulator {
                     default:
                         break;
                 }
+                // check all reservation stations for instructions that can excecute
+                checkAddSubReservationStations();
+                checkMulDivReservationStations();
                 clockCycle += 1;
             }
         }

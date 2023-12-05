@@ -1,4 +1,5 @@
 public class Instruction {
+    private int id;
     private InstructionType type;
     private int rs;
     private int rt;
@@ -13,7 +14,8 @@ public class Instruction {
     private int finishedAt;
     private int writeBackAt;
 
-    public Instruction(InstructionType type, int rs, int rt, int rd, int immediate, int address, String label) {
+    public Instruction(int id, InstructionType type, int rs, int rt, int rd, int immediate, int address, String label) {
+        this.id = id;
         this.type = type;
         this.rs = rs;
         this.rt = rt;
@@ -25,6 +27,10 @@ public class Instruction {
         this.startedAt = 0;
         this.finishedAt = 0;
         this.writeBackAt = 0;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void setIssuedAt(int issuedAt) {
