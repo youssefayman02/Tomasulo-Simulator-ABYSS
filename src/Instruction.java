@@ -23,8 +23,8 @@ public class Instruction {
         this.label = label;
         this.issuedAt = 0;
         this.startedAt = 0;
-        this.writeBackAt = 0;
         this.finishedAt = 0;
+        this.writeBackAt = 0;
     }
 
     public void setIssuedAt(int issuedAt) {
