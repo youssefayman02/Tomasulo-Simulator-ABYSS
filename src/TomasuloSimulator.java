@@ -39,7 +39,6 @@ public class TomasuloSimulator {
     private int clockCycle;
     private int programCounter;
 
-
     public TomasuloSimulator() {
         this.instructionQueue = new ArrayList<>();
         this.addSubReservationStation = new ArrayList<>();
