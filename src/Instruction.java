@@ -11,7 +11,10 @@ public class Instruction {
     private int finishedAt;
     private int writeBackAt;
 
-    public Instruction(InstructionType type, int rs, int rt, int rd, int immediate, int address, String branchLabel) {
+    private int instructionId;
+
+    public Instruction(int instructionId,InstructionType type, int rs, int rt, int rd, int immediate, int address, String branchLabel) {
+        this.instructionId = instructionId;
         this.type = type;
         this.rs = rs;
         this.rt = rt;
@@ -23,6 +26,14 @@ public class Instruction {
         this.startedAt = -1;
         this.finishedAt = -1;
         this.writeBackAt = -1;
+    }
+
+    public int getInstructionId() {
+        return instructionId;
+    }
+
+    public void setInstructionId(int instructionId) {
+        this.instructionId = instructionId;
     }
 
     public InstructionType getType() {
