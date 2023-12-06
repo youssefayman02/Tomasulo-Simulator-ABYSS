@@ -133,7 +133,6 @@ public class TomasuloSimulator {
                 instructionId++;
                 instructionQueue.add(instruction);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
