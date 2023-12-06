@@ -6,8 +6,9 @@ public class ReservationStation {
     private String qj;
     private String qk;
     private int time;
+    private String tag;
 
-    public ReservationStation(int busy, InstructionType op, double vj, double vk, String qj, String qk, int time) {
+    public ReservationStation(int busy, InstructionType op, double vj, double vk, String qj, String qk, int time, String tag) {
         this.busy = busy;
         this.op = op;
         this.vj = vj;
@@ -15,6 +16,7 @@ public class ReservationStation {
         this.qj = qj;
         this.qk = qk;
         this.time = time;
+        this.tag = tag;
     }
 
     public int getBusy() {
@@ -73,16 +75,11 @@ public class ReservationStation {
         this.time = time;
     }
 
-    @Override
-    public String toString() {
-        return "ReservationStation{" +
-                "busy=" + busy +
-                ", op=" + op +
-                ", vj=" + vj +
-                ", vk=" + vk +
-                ", qj='" + qj + '\'' +
-                ", qk='" + qk + '\'' +
-                ", time=" + time +
-                '}';
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

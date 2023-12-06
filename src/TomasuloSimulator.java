@@ -12,24 +12,39 @@ public class TomasuloSimulator {
     private ArrayList<Instruction> instructionQueue;
     private ArrayList<ReservationStation> addSubReservationStation;
     private ArrayList<ReservationStation> mulDivReservationStation;
-    private ArrayList<RegisterFileEntry> registerFile;
+    private ArrayList<LoadBufferEntry> loadReservationStation;
+    private ArrayList<StoreBufferEntry> storeReservationStation;
+    private ArrayList<RegisterFileEntry> integerRegisterFile;
     private ArrayList<RegisterFileEntry> floatingPointRegisterFile;
 
+    private ArrayList<Double> memory;
     private int addSubReservationStationSize;
-    private int mulDivReservationStationSize;
-    private int programCounter;
 
+    /*
+        Add a counter for each reservation station to keep track of the number of instructions
+        in the reservation station and give them unique Tags
+    */
+    private static int addSubReservationStationCounter;
+    private int mulDivReservationStationSize;
+    private static int mulDivReservationStationCounter;
     private int addLatency;
     private int subLatency;
     private int mulLatency;
     private int divLatency;
+    private int storeLatency;
+    private int loadLatency;
+    private int addILatency;
+    private int subILatency;
+    private int bnezLatency;
     private int clockCycle;
+    private int programCounter;
+
 
     public TomasuloSimulator() {
         this.instructionQueue = new ArrayList<>();
         this.addSubReservationStation = new ArrayList<>();
         this.mulDivReservationStation = new ArrayList<>();
-        this.registerFile = new ArrayList<>();
+        this.integerRegisterFile = new ArrayList<>();
         this.floatingPointRegisterFile = new ArrayList<>();
         this.clockCycle = 1;
         this.programCounter = 0;
@@ -144,18 +159,18 @@ public class TomasuloSimulator {
             time = this.subLatency;
         }
 
-        if (registerFile.get(instruction.getRs()).getQi().equals("0")) {
-            vj = Integer.parseInt(registerFile.get(instruction.getRs()).getQi());
+        if (floatingPointRegisterFile.get(instruction.getRs()).getQi().equals("0")) {
+            vj = Integer.parseInt(floatingPointRegisterFile.get(instruction.getRs()).getQi());
         }
         else {
-            qj = registerFile.get(instruction.getRs()).getQi();
+            qj = floatingPointRegisterFile.get(instruction.getRs()).getQi();
         }
 
-        if (registerFile.get(instruction.getRt()).getQi().equals("0")) {
-            vk = Integer.parseInt(registerFile.get(instruction.getRt()).getQi());
+        if (floatingPointRegisterFile.get(instruction.getRt()).getQi().equals("0")) {
+            vk = Integer.parseInt(floatingPointRegisterFile.get(instruction.getRt()).getQi());
         }
         else {
-            qk =  registerFile.get(instruction.getRt()).getQi();
+            qk =  floatingPointRegisterFile.get(instruction.getRt()).getQi();
         }
 
         if (vj != 0 && vk != 0) {
@@ -163,7 +178,7 @@ public class TomasuloSimulator {
             instruction.setFinishedAt(instruction.getStartedAt() + time - 1);
             instruction.setWriteBackAt(instruction.getFinishedAt() + 1);
         }
-        ReservationStation reservationStation = new ReservationStation(1, instruction.getType(), vj, vk, qj, qk, time);
+        ReservationStation reservationStation = new ReservationStation(1, instruction.getType(), vj, vk, qj, qk, time, "A" + (++addSubReservationStationCounter));
         addSubReservationStation.add(reservationStation);
     }
 
@@ -184,7 +199,7 @@ public class TomasuloSimulator {
 
     public void fillRegisterFile(int registerNumber) {
         for (int i = 0; i < registerNumber; i++) {
-            this.registerFile.add(new RegisterFileEntry(i, "0"));
+            this.integerRegisterFile.add(new RegisterFileEntry(i, "0"));
             this.floatingPointRegisterFile.add(new RegisterFileEntry(i, "0"));
         }
     }
@@ -213,6 +228,38 @@ public class TomasuloSimulator {
                 }
                 clockCycle += 1;
             }
+        }
+    }
+
+    public void issue (Instruction instruction) {
+        switch (instruction.getType()) {
+            case ADD:
+            case SUB:
+                handleAddSubInstruction(instruction);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void execute() {
+    }
+
+    public void writeBack() {
+
+    }
+
+    public void simulate () {
+        while (!allInstructionsDone()) {
+            Instruction instruction = instructionQueue.get(programCounter);
+
+            issue(instruction);
+
+            execute();
+
+            writeBack();
+
+            programCounter += 1;
         }
     }
 

@@ -5,6 +5,8 @@ public class StoreBufferEntry {
     private String qj;
     private int time;
     private int busy;
+    private String tag;
+    private static int nextTag = 0;
 
     public StoreBufferEntry(int address, double vj, String qj, int time, int busy) {
         this.address = address;
@@ -12,6 +14,7 @@ public class StoreBufferEntry {
         this.qj = qj;
         this.time = time;
         this.busy = busy;
+        this.tag = "S" + (++nextTag);
     }
 
     public int getAddress() {
@@ -54,14 +57,19 @@ public class StoreBufferEntry {
         this.busy = busy;
     }
 
-    @Override
-    public String toString() {
-        return "StoreBufferEntry{" +
-                "address=" + address +
-                ", vj=" + vj +
-                ", qj='" + qj + '\'' +
-                ", time=" + time +
-                ", busy=" + busy +
-                '}';
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public static int getNextTag() {
+        return nextTag;
+    }
+
+    public static void setNextTag(int nextTag) {
+        StoreBufferEntry.nextTag = nextTag;
     }
 }
