@@ -3,17 +3,16 @@ public class Instruction {
     private int rs;
     private int rt;
     private int rd;
-    private int immediate;
+    private double immediate;
     private int address;
     private String branchLabel;
     private int issuedAt;
     private int startedAt;
     private int finishedAt;
     private int writeBackAt;
-
     private int instructionId;
 
-    public Instruction(int instructionId,InstructionType type, int rs, int rt, int rd, int immediate, int address, String branchLabel) {
+    public Instruction(int instructionId,InstructionType type, int rs, int rt, int rd, double immediate, int address, String branchLabel) {
         this.instructionId = instructionId;
         this.type = type;
         this.rs = rs;
@@ -68,11 +67,11 @@ public class Instruction {
         this.rd = rd;
     }
 
-    public int getImmediate() {
+    public double getImmediate() {
         return immediate;
     }
 
-    public void setImmediate(int immediate) {
+    public void setImmediate(double immediate) {
         this.immediate = immediate;
     }
 
@@ -122,5 +121,23 @@ public class Instruction {
 
     public void setWriteBackAt(int writeBackAt) {
         this.writeBackAt = writeBackAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Instruction{" +
+                "type=" + type +
+                ", rs=" + rs +
+                ", rt=" + rt +
+                ", rd=" + rd +
+                ", immediate=" + immediate +
+                ", address=" + address +
+                ", branchLabel='" + branchLabel + '\'' +
+                ", issuedAt=" + issuedAt +
+                ", startedAt=" + startedAt +
+                ", finishedAt=" + finishedAt +
+                ", writeBackAt=" + writeBackAt +
+                ", instructionId=" + instructionId +
+                '}';
     }
 }

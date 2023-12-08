@@ -1,8 +1,8 @@
-public class RegisterFileEntry {
+public class FloatingPointRegisterFileEntry {
     private double value;
     private String qi;
 
-    public RegisterFileEntry(double value, String qi) {
+    public FloatingPointRegisterFileEntry(double value, String qi) {
         this.value = value;
         this.qi = qi;
     }
@@ -25,7 +25,7 @@ public class RegisterFileEntry {
 
     @Override
     public String toString() {
-        return "RegisterFileEntry{" +
+        return "FloatingPointRegisterFileEntry{" +
                 "value=" + value +
                 ", qi='" + qi + '\'' +
                 '}';
