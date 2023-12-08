@@ -36,7 +36,7 @@ public class TomasuloSimulator {
     private int subILatency = 1;
     private int bnezLatency = 1;
     private int clockCycle;
-    private int programCounter = 0;
+    private int programCounter;
 
     public TomasuloSimulator() {
         this.instructionQueue = new ArrayList<>();
@@ -48,6 +48,7 @@ public class TomasuloSimulator {
         this.integerRegisterFile = new ArrayList<>();
         this.cdb = new Hashtable<>();
         this.clockCycle = 0;
+        this.programCounter = 0;
     }
 
     public void setAddSubReservationStationSize(int addSubReservationStationSize) {
@@ -242,7 +243,7 @@ public class TomasuloSimulator {
             1) All reservation stations are empty
             2) The program counter hits the end of the instruction queue
         */
-        return addSubReservationStation.isEmpty() && mulDivReservationStation.isEmpty() && loadReservationStation.isEmpty() && storeReservationStation.isEmpty() && programCounter == instructionQueue.size();
+        return addSubReservationStation.isEmpty() && mulDivReservationStation.isEmpty() && loadReservationStation.isEmpty() && storeReservationStation.isEmpty();
     }
 
     /*
@@ -496,7 +497,12 @@ public class TomasuloSimulator {
 
 
     public void simulate () {
-        while (!allInstructionsDone()) {
+        System.out.println(allInstructionsDone());
+        while ((!allInstructionsDone()) || clockCycle == 0){
+            if (programCounter >= instructionQueue.size()) {
+                return;
+            }
+            System.out.println(programCounter);
             Instruction instruction = instructionQueue.get(programCounter);
 
             issue(instruction);
