@@ -230,12 +230,6 @@ public class TomasuloSimulator {
 //        }
 //    }
 //
-    public void execute() {
-    }
-
-    public void writeBack() {
-
-    }
 
     public boolean allInstructionsDone() {
         /*
@@ -253,10 +247,10 @@ public class TomasuloSimulator {
         4) if they are not available, update the reservation station with the tags
         5) update the register file with the tag
     */
-    public void issueAddSubReservationStation(Instruction instruction) {
+    public String issueAddSubReservationStation(Instruction instruction) {
         if (addSubReservationStation.isFull()) {
             System.out.println("========== STALL, The ADD/SUB RESERVATION STATION IS FULL ==========");
-            return;
+            return "";
         }
 
         System.out.println(instruction.toString() + " Has Issued");
@@ -268,6 +262,7 @@ public class TomasuloSimulator {
         String qj = "0";
         String qk = "0";
         int time = 0;
+        String tag = "";
 
         switch (op) {
             case ADD:
@@ -295,49 +290,49 @@ public class TomasuloSimulator {
 
         // Check if the source registers are available
         if (op.equals(InstructionType.ADD) || op.equals(InstructionType.SUB)) {
-            if (floatingPointRegisterFile.get(instruction.getRs()).getQi() == "") {
+            if (floatingPointRegisterFile.get(instruction.getRs()).getQi().equals("0")) {
                 vj = floatingPointRegisterFile.get(instruction.getRs()).getValue();
             }
             else {
                 qj = floatingPointRegisterFile.get(instruction.getRs()).getQi();
             }
 
-            if (floatingPointRegisterFile.get(instruction.getRt()).getQi() == "") {
+            if (floatingPointRegisterFile.get(instruction.getRt()).getQi().equals("0")) {
                 vk = floatingPointRegisterFile.get(instruction.getRt()).getValue();
             }
             else {
                 qk = floatingPointRegisterFile.get(instruction.getRt()).getQi();
             }
 
-            String tag = addSubReservationStation.issueInstruction(time, true, op, vj, vk, qj, qk, -1);
+            tag = addSubReservationStation.issueInstruction(time, true, op, vj, vk, qj, qk, -1);
             // update the register file with the tag
             floatingPointRegisterFile.get(instruction.getRd()).setQi(tag);
-            return;
+            return tag;
         }
 
         if (op.equals(InstructionType.DADD) || op.equals(InstructionType.DSUB)) {
-            if (integerRegisterFile.get(instruction.getRs()).getQi() == "") {
+            if (integerRegisterFile.get(instruction.getRs()).getQi().equals("0")) {
                 vj = integerRegisterFile.get(instruction.getRs()).getValue();
             }
             else {
                 qj = integerRegisterFile.get(instruction.getRs()).getQi();
             }
 
-            if (integerRegisterFile.get(instruction.getRt()).getQi() == "") {
+            if (integerRegisterFile.get(instruction.getRt()).getQi().equals("0")) {
                 vk = integerRegisterFile.get(instruction.getRt()).getValue();
             }
             else {
                 qk = integerRegisterFile.get(instruction.getRt()).getQi();
             }
 
-            String tag = addSubReservationStation.issueInstruction(time, true, op, vj, vk, qj, qk, -1);
+            tag = addSubReservationStation.issueInstruction(time, true, op, vj, vk, qj, qk, -1);
             // update the register file with the tag
             integerRegisterFile.get(instruction.getRd()).setQi(tag);
-            return;
+            return tag;
         }
 
         if (op.equals(InstructionType.ADDI) || op.equals(InstructionType.SUBI)) {
-            if (integerRegisterFile.get(instruction.getRs()).getQi() == "") {
+            if (integerRegisterFile.get(instruction.getRs()).getQi().equals("0")) {
                 vj = integerRegisterFile.get(instruction.getRs()).getValue();
             }
             else {
@@ -346,35 +341,37 @@ public class TomasuloSimulator {
 
             vk = instruction.getImmediate();
 
-            String tag = addSubReservationStation.issueInstruction(time, true, op, vj, vk, qj, qk, -1);
+            tag = addSubReservationStation.issueInstruction(time, true, op, vj, vk, qj, qk, -1);
             // update the register file with the tag
             integerRegisterFile.get(instruction.getRd()).setQi(tag);
-            return;
+            return tag;
         }
 
         if (op.equals(InstructionType.BNEZ)) {
-            if (integerRegisterFile.get(instruction.getRt()).getQi() == "") {
+            if (integerRegisterFile.get(instruction.getRt()).getQi().equals("0")) {
                 vj = integerRegisterFile.get(instruction.getRt()).getValue();
             }
             else {
                 qj = integerRegisterFile.get(instruction.getRt()).getQi();
             }
 
-            addSubReservationStation.issueInstruction(time, true, op, vj, vk, qj, qk, instruction.getAddress());
+            tag = addSubReservationStation.issueInstruction(time, true, op, vj, vk, qj, qk, instruction.getAddress());
+            return tag;
         }
-
+         return tag;
     }
 
-    public void issueMulDivReservationStation(Instruction instruction) {
+    public String issueMulDivReservationStation(Instruction instruction) {
         if (mulDivReservationStation.isFull()) {
             System.out.println("========== STALL, The MUL/DIV RESERVATION STATION IS FULL ==========");
-            return;
+            return "";
         }
 
         System.out.println(instruction.toString() + " Has Issued");
         instruction.setIssuedAt(clockCycle);
 
         boolean busy = true;
+        String tag = "";
         InstructionType op = instruction.getType();
         double vj = 0;
         double vk = 0;
@@ -395,14 +392,14 @@ public class TomasuloSimulator {
 
         // Check if the source registers are available
         if (op.equals(InstructionType.MUL) || op.equals(InstructionType.DIV)) {
-            if (floatingPointRegisterFile.get(instruction.getRs()).getQi() == "") {
+            if (floatingPointRegisterFile.get(instruction.getRs()).getQi().equals("0")) {
                 vj = floatingPointRegisterFile.get(instruction.getRs()).getValue();
             }
             else {
                 qj = floatingPointRegisterFile.get(instruction.getRs()).getQi();
             }
 
-            if (floatingPointRegisterFile.get(instruction.getRt()).getQi() == "") {
+            if (floatingPointRegisterFile.get(instruction.getRt()).getQi().equals("0")) {
                 vk = floatingPointRegisterFile.get(instruction.getRt()).getValue();
             }
             else {
@@ -410,23 +407,26 @@ public class TomasuloSimulator {
             }
         }
 
-        String tag = mulDivReservationStation.issueInstruction(time, busy, op, vj, vk, qj, qk, -1);
+        tag = mulDivReservationStation.issueInstruction(time, busy, op, vj, vk, qj, qk, -1);
         // update the register file with the tag
         floatingPointRegisterFile.get(instruction.getRd()).setQi(tag);
+
+        return tag;
 
     }
 
 
-    public void issueLoadReservationStation(Instruction instruction) {
+    public String issueLoadReservationStation(Instruction instruction) {
         if (loadReservationStation.isFull()) {
             System.out.println("========== STALL, The LOAD RESERVATION STATION IS FULL ==========");
-            return;
+            return "";
         }
 
         System.out.println(instruction.toString() + " Has Issued");
         instruction.setIssuedAt(clockCycle);
 
         int time = this.loadLatency;
+        String tag = "";
         boolean busy = true;
         double vj = 0;
         double vk = 0;
@@ -434,23 +434,25 @@ public class TomasuloSimulator {
         String qk = "0";
         int address = instruction.getAddress();
 
-        String tag = loadReservationStation.issueInstruction(time, busy, instruction.getType(), vj, vk, qj, qk, address);
+        tag = loadReservationStation.issueInstruction(time, busy, instruction.getType(), vj, vk, qj, qk, address);
 
         // update the register file with the tag
         floatingPointRegisterFile.get(instruction.getRt()).setQi(tag);
 
+        return tag;
     }
 
-    public void issueStoreReservationStation(Instruction instruction) {
+    public String issueStoreReservationStation(Instruction instruction) {
         if (storeReservationStation.isFull()) {
             System.out.println("========== STALL, The STORE RESERVATION STATION IS FULL ==========");
-            return;
+            return "";
         }
 
         System.out.println(instruction.toString() + " Has Issued");
         instruction.setIssuedAt(clockCycle);
 
         int time = this.storeLatency;
+        String tag = "";
         boolean busy = true;
         double vj = 0;
         double vk = 0;
@@ -458,17 +460,18 @@ public class TomasuloSimulator {
         String qk = "0";
         int address = instruction.getAddress();
 
-        if (floatingPointRegisterFile.get(instruction.getRt()).getQi() == "") {
+        if (floatingPointRegisterFile.get(instruction.getRt()).getQi().equals("0")) {
             vj = floatingPointRegisterFile.get(instruction.getRt()).getValue();
         }
         else {
             qj = floatingPointRegisterFile.get(instruction.getRt()).getQi();
         }
 
-        storeReservationStation.issueInstruction(time, busy, instruction.getType(), vj, vk, qj, qk, address);
+        tag = storeReservationStation.issueInstruction(time, busy, instruction.getType(), vj, vk, qj, qk, address);
+        return tag;
     }
 
-    public void issue (Instruction instruction) {
+    public String issue (Instruction instruction) {
 
         switch (instruction.getType()) {
             case ADD:
@@ -478,22 +481,47 @@ public class TomasuloSimulator {
             case ADDI:
             case SUBI:
             case BNEZ:
-                issueAddSubReservationStation(instruction);
-                break;
+                return issueAddSubReservationStation(instruction);
             case MUL:
             case DIV:
-                issueMulDivReservationStation(instruction);
-                break;
+                return issueMulDivReservationStation(instruction);
             case L:
-                issueLoadReservationStation(instruction);
-                break;
+                return issueLoadReservationStation(instruction);
             case S:
-                issueStoreReservationStation(instruction);
-                break;
+                return issueStoreReservationStation(instruction);
             default:
                 break;
         }
+        return "";
     }
+
+    /*
+        Check for instructions in the reservation station that can execute
+        The tag is used in order to skip the instruction that has been issued in the same clock cycle
+    */
+    public void execute(String tag) {
+        // check the add/sub reservation station
+        for (int i = 0; i < addSubReservationStation.getSize(); i++) {
+            ReservationStationEntry entry = addSubReservationStation.getStations()[i];
+            if (entry.isBusy() && !entry.getTag().equals(tag) && entry.getTime() != 0) {
+
+                if (entry.getQj().equals("0") && entry.getQk().equals("0")) {
+                    entry.setTime(entry.getTime() - 1);
+                    if (entry.getTime() == 0) {
+                        entry.setBusy(false);
+                        entry.setQj("0");
+                        entry.setQk("0");
+                        entry.setVj(0);
+                        entry.setVk(0);
+                        entry.setOp(null);
+                        entry.setTag("");
+                    }
+                }
+            }
+        }
+    }
+
+    public void writeBack() {}
 
 
     public void simulate () {
@@ -505,9 +533,10 @@ public class TomasuloSimulator {
             System.out.println(programCounter);
             Instruction instruction = instructionQueue.get(programCounter);
 
-            issue(instruction);
+            // we use this tag in order to skip the issued instruction as we don't want to issue and execute the same instruction in the same clock cycle
+            String tag = issue(instruction);
 
-            execute();
+            execute(tag);
 
             writeBack();
 

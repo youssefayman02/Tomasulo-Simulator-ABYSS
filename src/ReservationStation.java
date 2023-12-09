@@ -50,6 +50,30 @@ public class ReservationStation {
         return "";
     }
 
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public String getTagSuffix() {
+        return tagSuffix;
+    }
+
+    public void setTagSuffix(String tagSuffix) {
+        this.tagSuffix = tagSuffix;
+    }
+
+    public ReservationStationEntry[] getStations() {
+        return stations;
+    }
+
+    public void setStations(ReservationStationEntry[] stations) {
+        this.stations = stations;
+    }
+
     @Override
     public String toString() {
         return "ReservationStation{" +

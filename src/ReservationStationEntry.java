@@ -16,8 +16,8 @@ public class ReservationStationEntry {
         this.op = null;
         this.vj = 0;
         this.vk = 0;
-        this.qj = "";
-        this.qk = "";
+        this.qj = "0";
+        this.qk = "0";
         this.address = 0;
     }
 
