@@ -25,7 +25,7 @@ public class IntegerRegisterFileEntry {
 
     @Override
     public String toString() {
-        return "IntegerRegisterFileEntry{" +
+        return "{" +
                 "value=" + value +
                 ", qi='" + qi + '\'' +
                 '}';

@@ -3,16 +3,17 @@ public class Instruction {
     private int rs;
     private int rt;
     private int rd;
-    private double immediate;
+    private int immediate;
     private int address;
-    private String branchLabel;
     private int issuedAt;
     private int startedAt;
     private int finishedAt;
     private int writeBackAt;
     private int instructionId;
+    private String branchLabel;
+    private String instructionLabel;
 
-    public Instruction(int instructionId,InstructionType type, int rs, int rt, int rd, double immediate, int address, String branchLabel) {
+    public Instruction(int instructionId,InstructionType type, int rs, int rt, int rd, int immediate, int address, String branchLabel, String instructionLabel) {
         this.instructionId = instructionId;
         this.type = type;
         this.rs = rs;
@@ -21,6 +22,7 @@ public class Instruction {
         this.immediate = immediate;
         this.address = address;
         this.branchLabel = branchLabel;
+        this.instructionLabel = instructionLabel;
         this.issuedAt = -1;
         this.startedAt = -1;
         this.finishedAt = -1;
@@ -67,11 +69,11 @@ public class Instruction {
         this.rd = rd;
     }
 
-    public double getImmediate() {
+    public int getImmediate() {
         return immediate;
     }
 
-    public void setImmediate(double immediate) {
+    public void setImmediate(int immediate) {
         this.immediate = immediate;
     }
 
@@ -123,6 +125,14 @@ public class Instruction {
         this.writeBackAt = writeBackAt;
     }
 
+    public String getInstructionLabel() {
+        return instructionLabel;
+    }
+
+    public void setInstructionLabel(String instructionLabel) {
+        this.instructionLabel = instructionLabel;
+    }
+
     @Override
     public String toString() {
         return "Instruction{" +
@@ -132,12 +142,13 @@ public class Instruction {
                 ", rd=" + rd +
                 ", immediate=" + immediate +
                 ", address=" + address +
-                ", branchLabel='" + branchLabel + '\'' +
                 ", issuedAt=" + issuedAt +
                 ", startedAt=" + startedAt +
                 ", finishedAt=" + finishedAt +
                 ", writeBackAt=" + writeBackAt +
                 ", instructionId=" + instructionId +
+                ", branchLabel='" + branchLabel + '\'' +
+                ", instructionLabel='" + instructionLabel + '\'' +
                 '}';
     }
 }

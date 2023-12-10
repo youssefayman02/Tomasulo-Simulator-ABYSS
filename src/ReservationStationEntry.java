@@ -3,14 +3,15 @@ public class ReservationStationEntry {
     private String tag;
     boolean busy;
     private InstructionType op;
-    private double vj;
-    private double vk;
+    private Object vj;
+    private Object vk;
     private String qj;
     private String qk;
     private int address;
+    private Instruction instruction;
 
     public ReservationStationEntry(String tag) {
-        this.time = 0;
+        this.time = -1;
         this.tag = tag;
         this.busy = false;
         this.op = null;
@@ -19,6 +20,7 @@ public class ReservationStationEntry {
         this.qj = "0";
         this.qk = "0";
         this.address = 0;
+        this.instruction = null;
     }
 
     public int getTime() {
@@ -53,19 +55,19 @@ public class ReservationStationEntry {
         this.op = op;
     }
 
-    public double getVj() {
+    public Object getVj() {
         return vj;
     }
 
-    public void setVj(double vj) {
+    public void setVj(Object vj) {
         this.vj = vj;
     }
 
-    public double getVk() {
+    public Object getVk() {
         return vk;
     }
 
-    public void setVk(double vk) {
+    public void setVk(Object vk) {
         this.vk = vk;
     }
 
@@ -93,6 +95,14 @@ public class ReservationStationEntry {
         this.address = address;
     }
 
+    public Instruction getInstruction() {
+        return instruction;
+    }
+
+    public void setInstruction(Instruction instruction) {
+        this.instruction = instruction;
+    }
+
     @Override
     public String toString() {
         return "ReservationStationEntry{" +
@@ -105,6 +115,7 @@ public class ReservationStationEntry {
                 ", qj='" + qj + '\'' +
                 ", qk='" + qk + '\'' +
                 ", address=" + address +
+                ", instruction=" + instruction +
                 '}';
     }
 }

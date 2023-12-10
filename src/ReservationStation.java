@@ -32,7 +32,7 @@ public class ReservationStation {
         return true;
     }
 
-    public String issueInstruction (int time, boolean busy, InstructionType op, double vj, double vk, String qj, String qk, int address) {
+    public String issueInstruction (int time, boolean busy, InstructionType op, Object vj, Object vk, String qj, String qk, int address, Instruction instruction) {
         for (int i = 0; i < size; i++) {
             if (!stations[i].isBusy()) {
                 stations[i].setTime(time);
@@ -43,6 +43,7 @@ public class ReservationStation {
                 stations[i].setQj(qj);
                 stations[i].setQk(qk);
                 stations[i].setAddress(address);
+                stations[i].setInstruction(instruction);
                 return stations[i].getTag();
             }
         }

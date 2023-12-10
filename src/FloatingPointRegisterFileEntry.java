@@ -25,7 +25,7 @@ public class FloatingPointRegisterFileEntry {
 
     @Override
     public String toString() {
-        return "FloatingPointRegisterFileEntry{" +
+        return "{" +
                 "value=" + value +
                 ", qi='" + qi + '\'' +
                 '}';
