@@ -3,7 +3,7 @@ public class Instruction {
     private int rs;
     private int rt;
     private int rd;
-    private int immediate;
+    private long immediate;
     private int address;
     private int issuedAt;
     private int startedAt;
@@ -13,7 +13,7 @@ public class Instruction {
     private String branchLabel;
     private String instructionLabel;
 
-    public Instruction(int instructionId,InstructionType type, int rs, int rt, int rd, int immediate, int address, String branchLabel, String instructionLabel) {
+    public Instruction(int instructionId,InstructionType type, int rs, int rt, int rd, long immediate, int address, String branchLabel, String instructionLabel) {
         this.instructionId = instructionId;
         this.type = type;
         this.rs = rs;
@@ -69,11 +69,11 @@ public class Instruction {
         this.rd = rd;
     }
 
-    public int getImmediate() {
+    public long getImmediate() {
         return immediate;
     }
 
-    public void setImmediate(int immediate) {
+    public void setImmediate(long immediate) {
         this.immediate = immediate;
     }
 

@@ -7,77 +7,281 @@ public class TomasuloSimulator {
     public static int instructionId = 0;
     private ArrayList<Instruction> instructionQueue;
     private ReservationStation addSubReservationStation;
-    private int addSubReservationStationSize = 3;
+    private int addSubReservationStationSize;
 
     private ReservationStation mulDivReservationStation;
-    private int mulDivReservationStationSize = 3;
+    private int mulDivReservationStationSize;
 
     private ReservationStation loadReservationStation;
-    private int loadReservationStationSize = 3;
+    private int loadReservationStationSize;
 
     private ReservationStation storeReservationStation;
-    private int storeReservationStationSize = 3;
+    private int storeReservationStationSize;
     private ArrayList<FloatingPointRegisterFileEntry> floatingPointRegisterFile;
-    private int floatingPointRegisterFileSize = 64;
+    private int floatingPointRegisterFileSize = 32;
 
     private ArrayList<IntegerRegisterFileEntry> integerRegisterFile;
     private int integerRegisterFileSize = 32;
 
     private CommonDataBus cdb;
 
-    private double[] cache = new double[50];
-    private int addLatency = 2;
-    private int subLatency = 2;
-    private int mulLatency = 10;
-    private int divLatency = 40;
-    private int storeLatency = 2;
-    private int loadLatency = 2;
+    private double[] cache = new double[124];
+    private int addLatency;
+    private int subLatency;
+    private int daddLatency;
+    private int dsubLatency;
+    private int mulLatency;
+    private int divLatency;
+    private int storeLatency;
+    private int loadLatency;
     private int addILatency = 1;
     private int subILatency = 1;
     private int bnezLatency = 1;
     private int clockCycle;
     private int programCounter;
+    private boolean branchStall;
 
     public TomasuloSimulator() {
-        this.instructionQueue = new ArrayList<>();
-        this.addSubReservationStation = new ReservationStation(addSubReservationStationSize, "A");
-        this.mulDivReservationStation = new ReservationStation(mulDivReservationStationSize, "M");
-        this.loadReservationStation = new ReservationStation(loadReservationStationSize, "L");
-        this.storeReservationStation = new ReservationStation(storeReservationStationSize, "S");
-        this.floatingPointRegisterFile = new ArrayList<>();
-        this.integerRegisterFile = new ArrayList<>();
-        this.cdb = new CommonDataBus();
-        this.clockCycle = 1;
-        this.programCounter = 0;
-        this.fillCache();
+    }
+
+    public static int getInstructionId() {
+        return instructionId;
+    }
+
+    public static void setInstructionId(int instructionId) {
+        TomasuloSimulator.instructionId = instructionId;
+    }
+
+    public ArrayList<Instruction> getInstructionQueue() {
+        return instructionQueue;
+    }
+
+    public void setInstructionQueue(ArrayList<Instruction> instructionQueue) {
+        this.instructionQueue = instructionQueue;
+    }
+
+    public ReservationStation getAddSubReservationStation() {
+        return addSubReservationStation;
+    }
+
+    public void setAddSubReservationStation(ReservationStation addSubReservationStation) {
+        this.addSubReservationStation = addSubReservationStation;
+    }
+
+    public int getAddSubReservationStationSize() {
+        return addSubReservationStationSize;
     }
 
     public void setAddSubReservationStationSize(int addSubReservationStationSize) {
         this.addSubReservationStationSize = addSubReservationStationSize;
     }
 
+    public ReservationStation getMulDivReservationStation() {
+        return mulDivReservationStation;
+    }
+
+    public void setMulDivReservationStation(ReservationStation mulDivReservationStation) {
+        this.mulDivReservationStation = mulDivReservationStation;
+    }
+
+    public int getMulDivReservationStationSize() {
+        return mulDivReservationStationSize;
+    }
+
     public void setMulDivReservationStationSize(int mulDivReservationStationSize) {
         this.mulDivReservationStationSize = mulDivReservationStationSize;
     }
 
-    public void incrementClockCycle() {
-        this.clockCycle += 1;
+    public ReservationStation getLoadReservationStation() {
+        return loadReservationStation;
+    }
+
+    public void setLoadReservationStation(ReservationStation loadReservationStation) {
+        this.loadReservationStation = loadReservationStation;
+    }
+
+    public int getLoadReservationStationSize() {
+        return loadReservationStationSize;
+    }
+
+    public void setLoadReservationStationSize(int loadReservationStationSize) {
+        this.loadReservationStationSize = loadReservationStationSize;
+    }
+
+    public ReservationStation getStoreReservationStation() {
+        return storeReservationStation;
+    }
+
+    public void setStoreReservationStation(ReservationStation storeReservationStation) {
+        this.storeReservationStation = storeReservationStation;
+    }
+
+    public int getStoreReservationStationSize() {
+        return storeReservationStationSize;
+    }
+
+    public void setStoreReservationStationSize(int storeReservationStationSize) {
+        this.storeReservationStationSize = storeReservationStationSize;
+    }
+
+    public ArrayList<FloatingPointRegisterFileEntry> getFloatingPointRegisterFile() {
+        return floatingPointRegisterFile;
+    }
+
+    public void setFloatingPointRegisterFile(ArrayList<FloatingPointRegisterFileEntry> floatingPointRegisterFile) {
+        this.floatingPointRegisterFile = floatingPointRegisterFile;
+    }
+
+    public int getFloatingPointRegisterFileSize() {
+        return floatingPointRegisterFileSize;
+    }
+
+    public void setFloatingPointRegisterFileSize(int floatingPointRegisterFileSize) {
+        this.floatingPointRegisterFileSize = floatingPointRegisterFileSize;
+    }
+
+    public ArrayList<IntegerRegisterFileEntry> getIntegerRegisterFile() {
+        return integerRegisterFile;
+    }
+
+    public void setIntegerRegisterFile(ArrayList<IntegerRegisterFileEntry> integerRegisterFile) {
+        this.integerRegisterFile = integerRegisterFile;
+    }
+
+    public int getIntegerRegisterFileSize() {
+        return integerRegisterFileSize;
+    }
+
+    public void setIntegerRegisterFileSize(int integerRegisterFileSize) {
+        this.integerRegisterFileSize = integerRegisterFileSize;
+    }
+
+    public CommonDataBus getCdb() {
+        return cdb;
+    }
+
+    public void setCdb(CommonDataBus cdb) {
+        this.cdb = cdb;
+    }
+
+    public double[] getCache() {
+        return cache;
+    }
+
+    public void setCache(double[] cache) {
+        this.cache = cache;
+    }
+
+    public int getAddLatency() {
+        return addLatency;
     }
 
     public void setAddLatency(int addLatency) {
         this.addLatency = addLatency;
     }
 
+    public int getSubLatency() {
+        return subLatency;
+    }
+
     public void setSubLatency(int subLatency) {
         this.subLatency = subLatency;
+    }
+
+    public int getDaddLatency() {
+        return daddLatency;
+    }
+
+    public void setDaddLatency(int daddLatency) {
+        this.daddLatency = daddLatency;
+    }
+
+    public int getDsubLatency() {
+        return dsubLatency;
+    }
+
+    public void setDsubLatency(int dsubLatency) {
+        this.dsubLatency = dsubLatency;
+    }
+
+    public int getMulLatency() {
+        return mulLatency;
     }
 
     public void setMulLatency(int mulLatency) {
         this.mulLatency = mulLatency;
     }
 
+    public int getDivLatency() {
+        return divLatency;
+    }
+
     public void setDivLatency(int divLatency) {
         this.divLatency = divLatency;
+    }
+
+    public int getStoreLatency() {
+        return storeLatency;
+    }
+
+    public void setStoreLatency(int storeLatency) {
+        this.storeLatency = storeLatency;
+    }
+
+    public int getLoadLatency() {
+        return loadLatency;
+    }
+
+    public void setLoadLatency(int loadLatency) {
+        this.loadLatency = loadLatency;
+    }
+
+    public int getAddILatency() {
+        return addILatency;
+    }
+
+    public void setAddILatency(int addILatency) {
+        this.addILatency = addILatency;
+    }
+
+    public int getSubILatency() {
+        return subILatency;
+    }
+
+    public void setSubILatency(int subILatency) {
+        this.subILatency = subILatency;
+    }
+
+    public int getBnezLatency() {
+        return bnezLatency;
+    }
+
+    public void setBnezLatency(int bnezLatency) {
+        this.bnezLatency = bnezLatency;
+    }
+
+    public int getClockCycle() {
+        return clockCycle;
+    }
+
+    public void setClockCycle(int clockCycle) {
+        this.clockCycle = clockCycle;
+    }
+
+    public int getProgramCounter() {
+        return programCounter;
+    }
+
+    public void setProgramCounter(int programCounter) {
+        this.programCounter = programCounter;
+    }
+
+    public boolean isBranchStall() {
+        return branchStall;
+    }
+
+    public void setBranchStall(boolean branchStall) {
+        this.branchStall = branchStall;
     }
 
     public void loadInstructions(String filename) {
@@ -90,7 +294,7 @@ public class TomasuloSimulator {
                 int rs = -1;
                 int rt = -1;
                 int rd = -1;
-                int immediate = -1;
+                long immediate = -1;
                 int address = -1;
                 String branchLabel = "";
                 String instructionLabel = "";
@@ -129,7 +333,7 @@ public class TomasuloSimulator {
                         type = InstructionType.valueOf(tokens[i]);
                         rd = Integer.parseInt(tokens[i + 1].substring(1));
                         rs = Integer.parseInt(tokens[i + 2].substring(1));
-                        immediate = Integer.parseInt(tokens[i + 3]);
+                        immediate = Long.parseLong(tokens[i + 3]);
                         break;
                     case "BNEZ":
                         type = InstructionType.valueOf(tokens[i]);
@@ -138,39 +342,6 @@ public class TomasuloSimulator {
                         break;
                     default:
                         break;
-
-
-
-//                switch (type) {
-//                    case L :
-//                    case S:
-//                        rt = Integer.parseInt(tokens[1].split("")[1]);
-//                        address = Integer.parseInt(tokens[2]);
-//                        break;
-//                    case ADD:
-//                    case DADD:
-//                    case DSUB:
-//                    case SUB:
-//                    case DIV:
-//                    case MUL:
-//                        rd = Integer.parseInt(tokens[1].split("")[1]);
-//                        rs = Integer.parseInt(tokens[2].split("")[1]);
-//                        rt = Integer.parseInt(tokens[3].split("")[1]);
-//                        break;
-//                    case SUBI:
-//                    case ADDI:
-//                        rd = Integer.parseInt(tokens[1].split("")[1]);
-//                        rs = Integer.parseInt(tokens[2].split("")[1]);
-//                        immediate = Integer.parseInt(tokens[3]);
-//                        break;
-//                    case BNEZ:
-//                        rt = Integer.parseInt(tokens[1].split("")[1]);
-//                        address = 0;
-//                        break;
-//                    default:
-//                        break;
-//                }
-//
                 }
                 Instruction instruction = new Instruction(instructionId, type, rs, rt, rd, immediate, address, branchLabel, instructionLabel);
                 instructionId++;
@@ -179,13 +350,33 @@ public class TomasuloSimulator {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // compute branch addresses
+        for (int i = 0; i < instructionQueue.size(); i++) {
+            Instruction instruction = instructionQueue.get(i);
+            if (instruction.getType().equals(InstructionType.BNEZ)) {
+                for (int j = 0; j < instructionQueue.size(); j++) {
+                    Instruction instruction1 = instructionQueue.get(j);
+                    if (instruction.getBranchLabel().equals(instruction1.getInstructionLabel())) {
+                        instruction.setAddress(j);
+                    }
+                }
+            }
+        }
     }
 
-    public void fillRegisterFile(int registerNumber) {
-        for (int i = 0; i < registerNumber; i++) {
+
+    public void fillRegisterFile() {
+        for (int i = 0; i < this.integerRegisterFileSize; i++) {
             this.integerRegisterFile.add(new IntegerRegisterFileEntry((long) i, "0"));
-            this.floatingPointRegisterFile.add(new FloatingPointRegisterFileEntry(i, "0"));
         }
+
+        for (int i = 0; i < this.floatingPointRegisterFileSize; i++) {
+            this.floatingPointRegisterFile.add(new FloatingPointRegisterFileEntry((double) i, "0"));
+        }
+        integerRegisterFile.get(1).setValue(2L);
+        floatingPointRegisterFile.get(2).setValue(2.0);
+
     }
 
     // fill cache with random int values
@@ -194,6 +385,8 @@ public class TomasuloSimulator {
         for (int i = 0; i < this.cache.length; i++) {
             cache[i] = random.nextInt(100);
         }
+        cache[0] = 2;
+        cache[1] = 2;
     }
 
     public boolean allInstructionsDone() {
@@ -211,6 +404,11 @@ public class TomasuloSimulator {
         5) update the register file with the tag
     */
     public String issueAddSubReservationStation(Instruction instruction) {
+        if (this.branchStall) {
+            System.out.println("========== STALL, THERE IS A BRANCH STALL ==========");
+            return "BRANCH STALL";
+        }
+
         if (addSubReservationStation.isFull()) {
             System.out.println("========== STALL, The ADD/SUB RESERVATION STATION IS FULL ==========");
             return "STALL";
@@ -295,6 +493,7 @@ public class TomasuloSimulator {
             }
 
             tag = addSubReservationStation.issueInstruction(time, true, op, vj, vk, qj, qk, instruction.getAddress(), instruction1);
+            this.branchStall = true;
             return tag;
         }
          return tag;
@@ -426,11 +625,13 @@ public class TomasuloSimulator {
     public int getLatency(InstructionType type) {
         switch (type) {
             case ADD:
-            case DADD:
                 return addLatency;
+            case DADD:
+                return daddLatency;
             case SUB:
-            case DSUB:
                 return subLatency;
+            case DSUB:
+                return dsubLatency;
             case MUL:
                 return mulLatency;
             case DIV:
@@ -535,6 +736,18 @@ public class TomasuloSimulator {
             ReservationStationEntry entry = addSubReservationStation.getStations()[i];
             Instruction instruction = entry.getInstruction();
             if (entry.isBusy() && this.clockCycle >= instruction.getWriteBackAt() && instruction.getWriteBackAt() != -1) {
+                if (entry.getOp().equals(InstructionType.BNEZ)) {
+                    branchStall = false;
+                    if ((long) entry.getVj() != 0) {
+                        System.out.println(instruction + " Branch is taken");
+                        programCounter = instruction.getAddress();
+                    } else {
+                        System.out.println(instruction + " Branch is not taken");
+                        this.programCounter++;
+                    }
+                    clearReservationStationEntry(entry);
+                    continue;
+                }
                 switch (entry.getOp()) {
                     case ADD:
                         System.out.println(instruction + " writes on the common data bus");
@@ -566,19 +779,18 @@ public class TomasuloSimulator {
                         return;
                     case ADDI:
                         System.out.println(instruction + " writes on the common data bus");
-                        int addiResult = (int) entry.getVj() + (int) entry.getVk();
+                        long addiResult = (long) entry.getVj() + (long) entry.getVk();
                         cdb.setTag(entry.getTag());
                         cdb.setValue(addiResult);
                         clearReservationStationEntry(entry);
                         return;
                     case SUBI:
                         System.out.println(instruction + " writes on the common data bus");
-                        int subiResult = (int) entry.getVj() - (int) entry.getVk();
+                        long subiResult = (long) entry.getVj() - (long) entry.getVk();
                         cdb.setTag(entry.getTag());
                         cdb.setValue(subiResult);
                         clearReservationStationEntry(entry);
                         return;
-//                    case BNEZ:
                 }
             }
         }
@@ -733,9 +945,6 @@ public class TomasuloSimulator {
                 entry.setQi("0");
             }
         }
-
-        this.cdb.clearCommonDataBus();
-
     }
 
 
@@ -754,22 +963,27 @@ public class TomasuloSimulator {
 
                 updateReservationStations();
 
-                incrementClockCycle();
+                setClockCycle(getClockCycle() + 1);
 
-                if (tag.equals("STALL")) {
+                if (branchStall || tag.equals("STALL") || tag.equals("BRANCH STALL")) {
+                    this.print();
+                    this.cdb.clearCommonDataBus();
                     continue;
                 }
 
+
                 programCounter++;
+
             }
             else {
                 execute("");
                 writeBack();
                 updateReservationStations();
-                incrementClockCycle();
+                setClockCycle(getClockCycle() + 1);
             }
 
             this.print();
+            this.cdb.clearCommonDataBus();
 
         }
 
@@ -778,6 +992,11 @@ public class TomasuloSimulator {
     }
 
     public void print() {
+        System.out.println("******************** PROGRAM COUNTER " + programCounter + " ********************");
+        System.out.println("******************** INSTRUCTION QUEUE ********************");
+        for (int i = 0; i < instructionQueue.size(); i++) {
+            System.out.println(instructionQueue.get(i).toString());
+        }
         System.out.println("******************** ADD/SUB Reservation Station ********************");
         for (int i = 0; i < addSubReservationStation.getSize(); i++) {
             System.out.println(addSubReservationStation.getStations()[i].toString());
@@ -794,6 +1013,10 @@ public class TomasuloSimulator {
         for (int i = 0; i < storeReservationStation.getSize(); i++) {
             System.out.println(storeReservationStation.getStations()[i].toString());
         }
+
+        System.out.println("******************** Common Data Bus ******************** ");
+        System.out.println(cdb.toString());
+
         System.out.println("******************** Floating Point Register File ******************** ");
         for (int i = 0; i < floatingPointRegisterFile.size(); i++) {
             System.out.println("F" + i + ": " +floatingPointRegisterFile.get(i).toString());
@@ -802,44 +1025,74 @@ public class TomasuloSimulator {
         for (int i = 0; i < integerRegisterFile.size(); i++) {
             System.out.println("R" + i + ": " + integerRegisterFile.get(i).toString());
         }
-        System.out.println("******************** Common Data Bus ******************** ");
-        System.out.println(cdb.toString());
         System.out.println("******************** Cache ******************** ");
         for (int i = 0; i < cache.length; i++) {
             System.out.println("M" + i + ": " + cache[i]);
         }
     }
 
+    public void takeInputsFromUser() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Add/Sub Reservation Station Size: ");
+        this.setAddSubReservationStationSize(sc.nextInt());
+        System.out.println("==============================");
+        System.out.print("Mul/Div Reservation Station Size: ");
+        this.setMulDivReservationStationSize(sc.nextInt());
+        System.out.println("==============================");
+        System.out.print("Load Buffer Size: ");
+        this.setLoadReservationStationSize(sc.nextInt());
+        System.out.println("==============================");
+        System.out.print("Store Buffer Size: ");
+        this.setStoreReservationStationSize(sc.nextInt());
+        System.out.println("==============================");
+        System.out.print("ADD.D Latency: ");
+        this.setAddLatency(sc.nextInt());
+        System.out.println("==============================");
+        System.out.print("SUB.D Latency: ");
+        this.setSubLatency(sc.nextInt());
+        System.out.println("==============================");
+        System.out.print("DADD Latency: ");
+        this.setDaddLatency(sc.nextInt());
+        System.out.println("==============================");
+        System.out.print("DSUB Latency: ");
+        this.setDsubLatency(sc.nextInt());
+        System.out.println("==============================");
+        System.out.print("MUL.D Latency: ");
+        this.setMulLatency(sc.nextInt());
+        System.out.println("==============================");
+        System.out.print("DIV.D Latency: ");
+        this.setDivLatency(sc.nextInt());
+        System.out.println("==============================");
+        System.out.print("L.D Latency: ");
+        this.setLoadLatency(sc.nextInt());
+        System.out.println("==============================");
+        System.out.print("S.D Latency: ");
+        this.setStoreLatency(sc.nextInt());
+        System.out.println("==============================");
+    }
+
+    public void init() {
+        this.addSubReservationStation = new ReservationStation(this.addSubReservationStationSize, "A");
+        this.mulDivReservationStation = new ReservationStation(this.mulDivReservationStationSize, "D");
+        this.loadReservationStation = new ReservationStation(this.loadReservationStationSize, "L");
+        this.storeReservationStation = new ReservationStation(this.storeReservationStationSize, "S");
+        this.integerRegisterFile = new ArrayList<>();
+        this.floatingPointRegisterFile = new ArrayList<>();
+        this.instructionQueue = new ArrayList<>();
+        this.cdb = new CommonDataBus();
+        this.clockCycle = 1;
+        this.programCounter = 0;
+        this.branchStall = false;
+        this.fillCache();
+        this.fillRegisterFile();
+    }
+
     public static void main(String[] args) {
         TomasuloSimulator simulator = new TomasuloSimulator();
-        Scanner sc = new Scanner(System.in);
-
-//        System.out.print("Add/Sub Reservation Station Size: ");
-//        simulator.setAddSubReservationStationSize(sc.nextInt());
-//        System.out.println("==============================");
-//        System.out.print("Mul/Div Reservation Station Size: ");
-//        simulator.setMulDivReservationStationSize(sc.nextInt());
-//        System.out.println("==============================");
-//        System.out.print("Add Latency: ");
-//        simulator.setAddLatency(sc.nextInt());
-//        System.out.println("==============================");
-//        System.out.print("Sub Latency: ");
-//        simulator.setSubLatency(sc.nextInt());
-//        System.out.println("==============================");
-//        System.out.print("Mul Latency: ");
-//        simulator.setMulLatency(sc.nextInt());
-//        System.out.println("==============================");
-//        System.out.print("Div Latency: ");
-//        simulator.setDivLatency(sc.nextInt());
-//        System.out.println("==============================");
-
-        simulator.loadInstructions("src/testCases2.txt");
-        simulator.fillRegisterFile(32);
-//        simulator.executeInstructions();
-//        simulator.instructionQueue.forEach(instruction -> {
-//            System.out.println(instruction);
-//        });
-        System.out.println(simulator.instructionQueue.toString());
+        simulator.takeInputsFromUser();
+        simulator.init();
+        simulator.loadInstructions("src/testCases3.txt");
+        simulator.print();
         System.out.println("==============================");
         simulator.simulate();
     }
